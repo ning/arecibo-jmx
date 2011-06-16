@@ -113,7 +113,7 @@ public class MonitoringItem
 	    StringBuilder builder = new StringBuilder();
 
 	    for (MonitoringType type : monitoringTypes) {
-	        if (builder.length() == 0) {
+	        if (builder.length() > 0) {
 	            builder.append(",");
 	        }
             builder.append(type);

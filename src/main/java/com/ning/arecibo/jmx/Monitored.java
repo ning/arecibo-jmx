@@ -11,40 +11,15 @@ import org.weakref.jmx.ManagedAnnotation;
 @ManagedAnnotation
 public @interface Monitored
 {
-    /**
-     * 
-     * @return description
-     */
-    String description() default "";
+    public static final String DEFAULT_DESCRIPTION = "";
+    public static final String DEFAULT_EVENT_ATTRIBUTE_NAME = "";
+    public static final String DEFAULT_EVENT_NAME = "";
+    public static final String DEFAULT_EVENT_NAME_PATTERN = ".*[Nn]ame=([a-zA-Z0-9_]*).*";
+    public static final MonitoringType[] DEFAULT_MONITORING_TYPE = { MonitoringType.VALUE };
 
-    /**
-     * 
-     * @return monitored event attribute name
-     */
-    String eventAttributeName() default "";
-
-    /**
-     * 
-     * @return monitored event name
-     */
-    String eventName() default "";
-
-    /**
-     * 
-     * @return monitored event name pattern
-     */
-    String eventNamePattern() default ".*[Nn]ame=([a-zA-Z0-9_]*).*";
-
-    /**
-     * 
-     * @return monitoring types
-     */
+    String description() default DEFAULT_DESCRIPTION;
+    String eventAttributeName() default DEFAULT_EVENT_ATTRIBUTE_NAME;
+    String eventName() default DEFAULT_EVENT_NAME;
+    String eventNamePattern() default DEFAULT_EVENT_NAME_PATTERN;
     MonitoringType[] monitoringType() default { MonitoringType.VALUE };
-
-    /**
-     * Tags for this managed thing.
-     * 
-     * @return tags
-     */
-    String[] tags() default {};
 }
