@@ -36,15 +36,18 @@
       <artifactId>jmxutils</artifactId>
       <version>1.9-SNAPSHOT</version>
     </dependency>
+    <!-- Keeping guice in provided scope to allow clients an easy way to deal with the groupId change between 2.0 and 3.0 -->
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
       <version>2.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.google.inject.extensions</groupId>
       <artifactId>guice-multibindings</artifactId>
       <version>2.0</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>

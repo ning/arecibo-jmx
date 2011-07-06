@@ -15,7 +15,8 @@ public @interface Monitored
     public static final String DEFAULT_EVENT_ATTRIBUTE_NAME = "";
     public static final String DEFAULT_EVENT_NAME = "";
     public static final String DEFAULT_EVENT_NAME_PATTERN = ".*[Nn]ame=([a-zA-Z0-9_]*).*";
-    public static final MonitoringType[] DEFAULT_MONITORING_TYPE = { MonitoringType.VALUE };
+    // we can only use compile time constants here, otherwise we get a compiler error (see compiler bug 6857918)
+    // so we can't define one for the default monitoring type
 
     String description() default DEFAULT_DESCRIPTION;
     String eventAttributeName() default DEFAULT_EVENT_ATTRIBUTE_NAME;
