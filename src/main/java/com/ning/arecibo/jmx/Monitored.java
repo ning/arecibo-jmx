@@ -18,6 +18,7 @@ public @interface Monitored
     // we can only use compile time constants here, otherwise we get a compiler error (see compiler bug 6857918)
     // so we can't define one for the default monitoring type
 
+    boolean enabled() default true;
     String description() default DEFAULT_DESCRIPTION;
     String eventAttributeName() default DEFAULT_EVENT_ATTRIBUTE_NAME;
     String eventName() default DEFAULT_EVENT_NAME;
