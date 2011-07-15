@@ -1,10 +1,10 @@
 package com.ning.arecibo.jmx;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import org.weakref.jmx.Managed;
 
@@ -39,43 +39,50 @@ public class AreciboProfile
 
     public synchronized void add(String attributeName, String attributePrettyName, String eventNamePattern, String eventPrettyName, MonitoringType[] monitoringType, Class<?> declaringClass)
     {
-        Map<String,MonitoringItem> map = itemsByClass.get(declaringClass);
+        Map<String, MonitoringItem> map = itemsByClass.get(declaringClass);
 
         if (map == null) {
-            map = new HashMap<String,MonitoringItem>();
+            map = new HashMap<String, MonitoringItem>();
             itemsByClass.put(declaringClass, map);
         }
         MonitoringItem newItem = new MonitoringItem(attributeName, attributePrettyName, eventNamePattern, eventPrettyName, monitoringType, declaringClass);
-        map.put(newItem.getHashKey(), newItem);
-        version.getAndIncrement();
+        MonitoringItem oldItem = map.put(newItem.getHashKey(), newItem);
+
+        if (oldItem == null) {
+            version.getAndIncrement();
+        }
     }
 
     public synchronized void add(String mbeanName, String attributeName, String attributePrettyName, String eventNamePattern, String eventPrettyName, MonitoringType[] monitoringType, Class<?> declaringClass)
     {
-        Map<String,MonitoringItem> map = itemsByMBeanName.get(mbeanName);
+        Map<String, MonitoringItem> map = itemsByMBeanName.get(mbeanName);
+
         if (map == null) {
-            map = new HashMap<String,MonitoringItem>();
+            map = new HashMap<String, MonitoringItem>();
             itemsByMBeanName.put(mbeanName, map);
         }
         MonitoringItem newItem = new MonitoringItem(attributeName, attributePrettyName, eventNamePattern, eventPrettyName, monitoringType, declaringClass);
-        map.put(newItem.getHashKey(), newItem);
-        version.getAndIncrement();
+        MonitoringItem oldItem = map.put(newItem.getHashKey(), newItem);
+
+        if (oldItem == null) {
+            version.getAndIncrement();
+        }
     }
 
     private synchronized String[] getMonitoringProfileStatic()
     {
-        List<String> list = new ArrayList<String>();
+        Set<String> configs = new LinkedHashSet<String>();
 
         for (Map.Entry<String, Object> entry : mbeans.entrySet()) {
-            String                     beanName        = entry.getKey();
-            Object                     monitoredObject = entry.getValue();
-            Map<String,MonitoringItem> attrs           = itemsByClass.get(monitoredObject.getClass());
+            String beanName = entry.getKey();
+            Object monitoredObject = entry.getValue();
+            Map<String, MonitoringItem> attrs = itemsByClass.get(monitoredObject.getClass());
 
             if (attrs != null) {
                 for (MonitoringItem item : attrs.values()) {
                     String config = item.toMonitoringConfig(beanName);
 
-                    list.add(config);
+                    configs.add(config);
                 }
             }
 
@@ -85,11 +92,11 @@ public class AreciboProfile
                 for (MonitoringItem item : attrs.values()) {
                     String config = item.toMonitoringConfig(beanName);
 
-                    list.add(config);
+                    configs.add(config);
                 }
             }
         }
-        return list.toArray(new String[list.size()]);
+        return configs.toArray(new String[configs.size()]);
     }
     
     @Managed

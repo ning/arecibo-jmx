@@ -16,11 +16,15 @@ public class MonitoringItem
 
     public MonitoringItem(String attributeName, String attributePrettyName, String eventNamePattern, String eventPrettyName, MonitoringType[] monitoringTypes, Class<?> declaringClass)
 	{
+        if (attributeName == null || attributePrettyName == null || eventNamePattern == null || eventPrettyName == null || monitoringTypes == null || declaringClass == null) {
+            throw new NullPointerException();
+        }
 		this.attributeName = attributeName;
 		this.attributePrettyName = attributePrettyName;
 		this.eventNamePattern = eventNamePattern;
 		this.eventPrettyName = eventPrettyName;
-		this.monitoringTypes = monitoringTypes;
+		this.monitoringTypes = Arrays.copyOf(monitoringTypes, monitoringTypes.length);
+		Arrays.sort(this.monitoringTypes);
 		this.declaringClass = declaringClass;
 		this.hashKey = initHashKey();
 	}
@@ -56,20 +60,23 @@ public class MonitoringItem
     }
 
     private String initHashKey() {
-		
-		Arrays.sort(this.monitoringTypes);
-		
-		String monTypeConcat = "";
-		for(MonitoringType monType:this.monitoringTypes) {
-			monTypeConcat += monType.getCode();
+		StringBuilder result = new StringBuilder();
+
+		result.append(attributeName);
+		result.append(":");
+		result.append(attributePrettyName);
+        result.append(":");
+	    result.append(eventNamePattern);
+        result.append(":");
+        result.append(eventPrettyName);
+        result.append(":");
+        result.append(declaringClass.getName());
+        result.append(":");
+
+		for (MonitoringType monType : monitoringTypes) {
+	        result.append(monType.getCode());
 		}
-		
-		return this.attributeName + ":" + 
-				this.attributePrettyName + ":" +
-				this.eventNamePattern + ":" +
-				this.eventPrettyName + ":" +
-				this.declaringClass.getName() + ":" +
-				monTypeConcat;
+		return result.toString();
 	}
 
 	public String getHashKey() {
@@ -120,4 +127,33 @@ public class MonitoringItem
 	    }
 	    return builder.toString();
 	}
+
+    @Override
+    public int hashCode()
+    {
+        return hashKey.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MonitoringItem other = (MonitoringItem) obj;
+
+        return hashKey.equals(other.hashKey);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "MonitoringItem [attributeName=" + attributeName + ", attributePrettyName=" + attributePrettyName + ", eventNamePattern=" + eventNamePattern + ", eventPrettyName=" + eventPrettyName + ", monitoringTypes=" + Arrays.toString(monitoringTypes) + ", declaringClass=" + declaringClass + "]";
+    }
 }
