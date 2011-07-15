@@ -36,7 +36,8 @@ public class AreciboMBeanExporter extends MBeanExporter
             final Annotation annotation = findRelevantAnnotation(method);
 
             if (annotation != null) {
-                boolean monitoringOn = getAttrValue(annotation, "monitored", boolean.class, true);
+                boolean monitoringOn = getAttrValue(annotation, "monitored", boolean.class, true) &&
+                                       getAttrValue(annotation, "enabled", boolean.class, true);
 
                 if (monitoringOn) {
                     String  methodName = method.getName();

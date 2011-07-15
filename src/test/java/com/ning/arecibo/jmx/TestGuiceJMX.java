@@ -23,6 +23,7 @@ import org.weakref.jmx.guice.MBeanModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Stage;
 
 @Test(groups = "fast")
 public class TestGuiceJMX
@@ -87,7 +88,8 @@ public class TestGuiceJMX
     {
         final String   mbeanName = TestGuiceJMX.class.getPackage().getName() + ":name=" + TestClass1.class.getSimpleName();
         @SuppressWarnings("unchecked")
-        final Injector injector  = Guice.createInjector(new MBeanModule(),
+        final Injector injector  = Guice.createInjector(Stage.PRODUCTION,
+                                                        new MBeanModule(),
                                                         new AreciboMonitoringModule(PROFILE_MBEAN_NAME, Monitored.class),
                                                         new AbstractModule() {
             @Override
@@ -110,7 +112,8 @@ public class TestGuiceJMX
     public void testMonitoredExportBuilderDefaults() throws Exception
     {
         final String   mbeanName = TestGuiceJMX.class.getPackage().getName() + ":name=" + TestClass2.class.getSimpleName();
-        final Injector injector  = Guice.createInjector(new MBeanModule(),
+        final Injector injector  = Guice.createInjector(Stage.PRODUCTION,
+                                                        new MBeanModule(),
                                                         new AreciboMonitoringModule(PROFILE_MBEAN_NAME),
                                                         new AbstractModule() {
             @Override
@@ -140,7 +143,8 @@ public class TestGuiceJMX
     {
         final String   mbeanName = TestGuiceJMX.class.getPackage().getName() + ":name=" + TestClass3.class.getSimpleName();
         @SuppressWarnings("unchecked")
-        final Injector injector  = Guice.createInjector(new MBeanModule(),
+        final Injector injector  = Guice.createInjector(Stage.PRODUCTION,
+                                                        new MBeanModule(),
                                                         new AreciboMonitoringModule(PROFILE_MBEAN_NAME, MyMonitored.class),
                                                         new AbstractModule() {
             @Override
