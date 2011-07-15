@@ -17,8 +17,11 @@ public class AreciboProfile
 
     public synchronized void register(String name, Object monitoredObject)
     {
-        mbeans.put(name, monitoredObject);
-        version.getAndIncrement();
+        Object oldObj = mbeans.put(name, monitoredObject);
+
+        if (oldObj != monitoredObject) {
+            version.getAndIncrement();
+        }
     }
 
     public synchronized void unregister(String name)
