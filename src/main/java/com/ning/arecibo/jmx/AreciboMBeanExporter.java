@@ -8,7 +8,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.management.MBeanServer;
+
+import org.weakref.jmx.JmxException;
 import org.weakref.jmx.MBeanExporter;
+import org.weakref.jmx.JmxException.Reason;
+
 import com.google.inject.Inject;
 
 public class AreciboMBeanExporter extends MBeanExporter
@@ -28,7 +32,18 @@ public class AreciboMBeanExporter extends MBeanExporter
     @Override
     public void export(String name, Object object)
     {
-        super.export(name, object);
+        try {
+            super.export(name, object);
+        }
+        catch (JmxException ex) {
+            if (Reason.INSTANCE_ALREADY_EXISTS.equals(ex.getReason())) {
+                super.unexport(name);
+                super.export(name, object);
+            }
+            else {
+                throw ex;
+            }
+        }
 
         boolean foundMonitoredAnnotation = false;
 
