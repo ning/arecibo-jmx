@@ -34,7 +34,7 @@
     <dependency>
       <groupId>org.weakref</groupId>
       <artifactId>jmxutils</artifactId>
-      <version>1.9-SNAPSHOT</version>
+      <version>1.9</version>
     </dependency>
     <!-- Keeping guice in provided scope to allow clients an easy way to deal with the groupId change between 2.0 and 3.0 -->
     <dependency>
