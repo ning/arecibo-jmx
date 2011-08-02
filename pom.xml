@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.ning.arecibo</groupId>
-	<artifactId>arecibo-jmx</artifactId>
-	<name>arecibo-jmx</name>
-	<version>1.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	<description>Arecibo JMX instrumentation library</description>
-	<url>http://www.ning.com</url>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ning.arecibo</groupId>
+  <artifactId>arecibo-jmx</artifactId>
+  <name>arecibo-jmx</name>
+  <version>1.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <description>Arecibo JMX instrumentation library</description>
+  <url>http://www.ning.com</url>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -28,13 +29,28 @@
     <url>http://github.com/ning/arecibo-jmx/tree/master</url>
   </scm>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <name>Nexus Release Repository</name>
+      <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.weakref</groupId>
       <artifactId>jmxutils</artifactId>
       <version>1.9</version>
     </dependency>
-    <!-- Keeping guice in provided scope to allow clients an easy way to deal with the groupId change between 2.0 and 3.0 -->
+    <!-- Keeping guice in provided scope to allow clients an easy way to 
+      deal with the groupId change between 2.0 and 3.0 -->
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
@@ -86,7 +102,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.0.2</version>
+        <version>2.3.2</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
@@ -119,40 +135,85 @@
           <groups>fast</groups>
         </configuration>
       </plugin>
-      <plugin> 
-        <groupId>org.apache.maven.plugins</groupId> 
-        <artifactId>maven-release-plugin</artifactId> 
-        <version>2.1</version> 
-        <dependencies> 
-          <dependency> 
-            <groupId>org.apache.maven.scm</groupId> 
-            <artifactId>maven-scm-provider-gitexe</artifactId> 
-            <version>1.4</version> 
-          </dependency> 
-          <dependency> 
-            <groupId>org.codehaus.plexus</groupId> 
-            <artifactId>plexus-utils</artifactId> 
-            <version>1.5.9</version> 
-          </dependency> 
-        </dependencies> 
-      </plugin> 
-      <plugin> 
-        <groupId>org.apache.maven.plugins</groupId> 
-        <artifactId>maven-scm-plugin</artifactId> 
-        <version>1.4</version> 
-        <dependencies> 
-          <dependency> 
-            <groupId>org.apache.maven.scm</groupId> 
-            <artifactId>maven-scm-provider-gitexe</artifactId> 
-            <version>1.4</version> 
-          </dependency> 
-          <dependency> 
-            <groupId>org.codehaus.plexus</groupId> 
-            <artifactId>plexus-utils</artifactId> 
-            <version>1.5.9</version> 
-          </dependency> 
-        </dependencies> 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.0-beta-9</version>
+        <configuration>
+          <mavenExecutorId>forked-path</mavenExecutorId>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+          <encoding>UTF-8</encoding>
+          <maxmemory>1g</maxmemory>
+          <links>
+            <link>http://java.sun.com/javase/6/docs/api/</link>
+          </links>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <attach>true</attach>
+        </configuration>
+        <executions>
+          <execution>
+            <id>create-source-jar</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.0</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
