@@ -4,7 +4,7 @@
   <groupId>com.ning.arecibo</groupId>
   <artifactId>arecibo-jmx</artifactId>
   <name>arecibo-jmx</name>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
   <packaging>jar</packaging>
   <description>Arecibo JMX instrumentation library</description>
   <url>http://www.ning.com</url>
