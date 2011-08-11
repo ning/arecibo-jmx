@@ -79,18 +79,20 @@ public class AreciboProfile
         for (Map.Entry<String, Object> entry : mbeans.entrySet()) {
             String beanName = entry.getKey();
             Object monitoredObject = entry.getValue();
-            Map<String, MonitoringItem> attrs = itemsByClass.get(monitoredObject.getClass());
+            Map<String, MonitoringItem> attrs;
 
-            if (attrs != null) {
-                for (MonitoringItem item : attrs.values()) {
-                    String config = item.toMonitoringConfig(beanName);
+            if (monitoredObject != null) {
+                attrs = itemsByClass.get(monitoredObject.getClass());
+                if (attrs != null) {
+                    for (MonitoringItem item : attrs.values()) {
+                        String config = item.toMonitoringConfig(beanName);
 
-                    configs.add(config);
+                        configs.add(config);
+                    }
                 }
             }
 
             attrs = itemsByMBeanName.get(beanName);
-
             if (attrs != null) {
                 for (MonitoringItem item : attrs.values()) {
                     String config = item.toMonitoringConfig(beanName);

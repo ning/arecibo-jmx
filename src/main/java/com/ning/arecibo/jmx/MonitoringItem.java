@@ -16,7 +16,7 @@ public class MonitoringItem
 
     public MonitoringItem(String attributeName, String attributePrettyName, String eventNamePattern, String eventPrettyName, MonitoringType[] monitoringTypes, Class<?> declaringClass)
 	{
-        if (attributeName == null || attributePrettyName == null || eventNamePattern == null || eventPrettyName == null || monitoringTypes == null || declaringClass == null) {
+        if (attributeName == null || attributePrettyName == null || eventNamePattern == null || eventPrettyName == null || monitoringTypes == null) {
             throw new NullPointerException();
         }
 		this.attributeName = attributeName;
@@ -70,7 +70,7 @@ public class MonitoringItem
         result.append(":");
         result.append(eventPrettyName);
         result.append(":");
-        result.append(declaringClass.getName());
+        result.append(declaringClass == null ? "" : declaringClass.getName());
         result.append(":");
 
 		for (MonitoringType monType : monitoringTypes) {
