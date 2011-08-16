@@ -70,7 +70,7 @@ public class AreciboMBeanExporter extends MBeanExporter
                                                getAttrValue(annotation, "eventAttributeName", String.class, Monitored.DEFAULT_EVENT_ATTRIBUTE_NAME),
                                                getAttrValue(annotation, "eventNamePattern", String.class, Monitored.DEFAULT_EVENT_NAME_PATTERN),
                                                getAttrValue(annotation, "eventName", String.class, Monitored.DEFAULT_EVENT_NAME),
-                                               getAttrValue(annotation, "eventName", MonitoringType[].class, new MonitoringType[] { MonitoringType.VALUE } ),
+                                               getAttrValue(annotation, "monitoringType", MonitoringType[].class, new MonitoringType[] { MonitoringType.VALUE } ),
                                                method.getDeclaringClass());
                             foundMonitoredAnnotation = true;
                         }
